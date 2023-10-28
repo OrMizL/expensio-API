@@ -17,8 +17,18 @@ router
 })
 .get('/get-all', async (req, res) => {
     try {
-        let allCategories = await Category.find({});
+        let allCategories = await Category.find({}).sort({type: -1, title: 1});
         res.status(201).send(allCategories);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+})
+.get('/get-by-type', async (req, res) => {
+    try {
+        let allCategories = await Category.find({}).sort({type: -1, title: 1});
+        let incomeCategories = allCategories.filter(category => category.type == 'income');
+        let expenseCategories = allCategories.filter(category => category.type == 'expense');
+        res.status(201).send({income_cat: incomeCategories, expense_cat: expenseCategories});
     } catch (err) {
         res.status(400).send(err);
     }
